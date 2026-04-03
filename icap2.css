@@ -96,8 +96,6 @@ header>.navbar>.container {
 .home-banner-subtitle,
 .page-banner-title,
 .card-item-title,
-.feature-item-title,
-.feature-grid--light .feature-item-title,
 .field--name-field-hpwr-title,
 .docs-reports .docs-reports-display,
 .doc-item .doc-title,
@@ -118,10 +116,9 @@ header>.navbar>.container {
 .fund-profile .paragraph--type--ti,
 .faq-item .faq-item-question,
 .icap-modal-sections .members-name,
-.about-us .feature-grid .grid-items-4 .feature-item-title,
-.about-us .feature-grid .grid-items-4 .feature-item-markets,
 .about-us .feature-grid .grid-items-4 .feature-item-text,
 .acfsef .docs-reports .ann-list-title,
+.page-node-type-fund .docs-reports .ann-list-title,
 .newsroom .view-articles.view-display-id-newsroom .view-header .titles,
 .newsroom .view-articles.view-display-id-newsroom_mobile .view-header .titles,
 .ann-slide-title,
@@ -131,7 +128,9 @@ header>.navbar>.container {
 .job-title,
 .search-overlay .search-overlay-title,
 .path-search .block-system-main-block > h2,
-.regional-markets .market-item-country{
+.regional-markets .market-item-country,
+.coverage-req-title,
+.careers .feature-item-title{
   font-weight: 300;
   font-family: 'Chap', sans-serif;
 }
@@ -1739,20 +1738,24 @@ header>.navbar>.container {
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #A44F17 #E8E2DB;
 }
 
-/* Optional scrollbar style */
+/* Chrome / Edge / Safari */
 .docs-reports .ann-list-scroll::-webkit-scrollbar {
   width: 6px;
 }
 
 .docs-reports .ann-list-scroll::-webkit-scrollbar-thumb {
   border-radius: 99px;
-  background: #a44f17;
+  background-color: #A44F17;
 }
 
 .docs-reports .ann-list-scroll::-webkit-scrollbar-track {
-  background: #e8e2db;
+  background-color: #E8E2DB;
 }
 
 /* Ensure inner cards don't stretch oddly */
@@ -2030,6 +2033,12 @@ header>.navbar>.container {
   background: rgba(0, 0, 0, .75);
   justify-content: center;
   align-items: center;
+  overflow: auto;
+}
+
+/* prevents background scroll while any modal is open */
+html.is-modal-open {
+  overflow: hidden;
 }
 
 .icap-modal.is-active {
@@ -2047,12 +2056,28 @@ header>.navbar>.container {
   max-width: 620px;
 }
 
+/* When the dialog is turned into a flex column (JS, mobile tall content),
+   the content wrappers must stretch so the table container can fill the
+   remaining space and scroll independently. */
+.icap-modal-content,
+.icap-modal-sections,
+.icap-modal-section {
+  flex: 1 1 auto;
+  min-height: 0;          /* allow flex children to shrink below content size */
+}
+
+.icap-modal-table-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;   /* prevent scroll chaining to body */
+}
+
 .icap-modal-close {
   position: absolute;
   top: 1rem;
   border: 0;
   background: transparent;
   font-size: 3rem;
+  font-weight: 300;
   line-height: 1;
   color: #A44F17;
   width: 25px;
@@ -2061,12 +2086,13 @@ header>.navbar>.container {
 }
 
 #icapModalApp .icap-modal-close {
-  border: 1px solid #D2D5D7;
+  border: 0;
   border-radius: 50%;
   background: #D2D5D7;
   color: #FFF;
   font-size: 1.5rem;
   font-weight: 500;
+  padding-bottom: 25px;
 }
 
 #icapModalUS .row-col.row-col-1 {
@@ -2111,6 +2137,7 @@ header>.navbar>.container {
 }
 
 /* Tables */
+
 .icap-modal-table {
   width: 100%;
 }
@@ -2477,7 +2504,7 @@ header a.emenu-item:hover {
   display: block;
 }
 .brokerage .page-banner-desc{
-  max-width: 75%;
+  max-width: 86%;
 }
 .brokerage .card-item.item-2 .card-item-corner{
   background-size: 66%;
@@ -2632,6 +2659,23 @@ header a.emenu-item:hover {
 .global-market .feature-item-year{
   display: none;
 }
+.global-market .field--name-field-hpwr-icon{
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+}
+.global-market .item-1 .field--name-field-hpwr-icon img{
+  max-width: 122px;
+}
+.global-market .item-2 .field--name-field-hpwr-icon img{
+  max-width: 150px;
+}
+.global-market .item-3 .field--name-field-hpwr-icon img{
+  max-width: 148px;
+}
+.global-market .item-4 .field--name-field-hpwr-icon img{
+  max-width: 153px;
+}
 .asset-management-lp .feature-item-year{
   display: none;
 }
@@ -2646,44 +2690,56 @@ header a.emenu-item:hover {
   padding: 0;
   min-width: auto;
 }
-.acfsef .docs-reports {
+.acfsef .docs-reports,
+.page-node-type-fund .docs-reports {
   background-image: none !important;
 }
-.acfsef .fund-profile-value{
+.acfsef .fund-profile-value,
+.page-node-type-fund .fund-profile-value{
   font-weight: 500;
   text-align: end;
 }
-.acfsef .all-perc-wrapper{
+.acfsef .all-perc-wrapper,
+.page-node-type-fund .all-perc-wrapper{
   border: 1px solid #E8E2DB;
   border-radius: 2rem;
 }
-.acfsef .paragraph--type--fund-performance .sub-txt {
+.acfsef .paragraph--type--fund-performance .sub-txt,
+.page-node-type-fund .paragraph--type--fund-performance .sub-txt {
   font-weight: 300;
 } 
-.acfsef .fund-profile .sub-txt {
+.acfsef .fund-profile .sub-txt,
+.page-node-type-fund .fund-profile .sub-txt {
   font-weight: 700;
 }
-.acfsef .paragraph--type--fund-highlights{
+.acfsef .paragraph--type--fund-highlights,
+.page-node-type-fund .paragraph--type--fund-highlights{
   border-radius: 1.5rem;
 }
-.acfsef .fund-profile-wrapper {
+.acfsef .fund-profile-wrapper,
+.page-node-type-fund .fund-profile-wrapper {
   gap: 1rem;
 }
-.acfsef .holding-perc{
+.acfsef .holding-perc,
+.page-node-type-fund .holding-perc{
   font-weight: 500;
   color: #1A1C1E;
   text-align: end;
 }
-.acfsef .docs-reports .docs-reports-tab {
+.acfsef .docs-reports .docs-reports-tab,
+.page-node-type-fund .docs-reports .docs-reports-tab {
   border-color: #1A1C1E;
 }
-.acfsef .doc-item .doc-row{
+.acfsef .doc-item .doc-row,
+.page-node-type-fund .doc-item .doc-row{
   border-color: #E8E2DB;
 }
-.acfsef .docs-reports .docs-list {
+.acfsef .docs-reports .docs-list,
+.page-node-type-fund .docs-reports .docs-list {
   gap: 1.375rem;
 }
-.acfsef .docs-reports .ann-text strong{
+.acfsef .docs-reports .ann-text strong,
+.page-node-type-fund .docs-reports .ann-text strong{
   font-weight: 400;
 }
 .region-breadcrumb .paragraph-container {
@@ -2742,9 +2798,11 @@ header a.emenu-item:hover {
 .newsroom .hpnrdesc{
   color: #635E5E;
 }
+.home .hpnrdesc p,
 .newsroom .hpnrdesc p{
   margin: 0 !important;
 }
+.home .hpnr-image-wrapper,
 .newsroom .hpnr-image-wrapper{
   min-height: 220px;
   background-color: white;
@@ -2773,6 +2831,8 @@ header a.emenu-item:hover {
 .pager--load-more .pager__items .pager__item{
   display: block;
 }
+.home .hpnrimg .field__item,
+.about-us .hpnrimg .field__item,
 .newsroom .hpnrimg .field__item{
   max-width: 314px;
   overflow: hidden;
@@ -2780,6 +2840,8 @@ header a.emenu-item:hover {
   position: relative;
   height: 220px;
 }
+.home .hpnrimg img,
+.about-us .hpnrimg img,
 .newsroom .hpnrimg img{
   height: 220px;
   width: auto;
@@ -2809,6 +2871,7 @@ header a.emenu-item:hover {
 .page-node-type-article .hpnrviewbg{
   padding: 0.5rem !important;
   min-height: 431px;
+  display: block;
 }
 .page-node-type-article .hpnr-image-wrapper .field__item{
   max-width: 314px;
@@ -3230,6 +3293,7 @@ header a.emenu-item:hover {
   line-height: 1.375rem;
   color:#5D5D5D;
   font-weight: 400;
+  display: block;
 }
 .fund-performance-chart-stats .value{
   font-size: 0.875rem;
@@ -3239,33 +3303,94 @@ header a.emenu-item:hover {
   display: flex;
   align-items: center;
 }
-.fund-performance-chart-stats .value.negative::after,
-.fund-performance-chart-stats .value.positive::after{
-  content: "";
-  display: inline-block;
-  margin-left: .35rem;
-  margin-right: 0.35rem;
-  border-radius: 1px;
-  width: 13px;
-  height: 11px;
-  background: transparent;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  flex: none;
-  order: 1;
-  flex-grow: 0;
-}
-.fund-performance-chart-stats .value.positive::after{
-  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2213%22%20height%3D%2211%22%20viewBox%3D%220%200%2013%2011%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5.33124%200.499999C5.71614%20-0.166667%206.67839%20-0.166667%207.06329%200.5L12.2594%209.5C12.6443%2010.1667%2012.1632%2011%2011.3934%2011H1.00111C0.231312%2011%20-0.249812%2010.1667%200.135088%209.5L5.33124%200.499999Z%22%20fill%3D%22%2313AE5C%22/%3E%3C/svg%3E");
-}
-.fund-performance-chart-stats .value.negative::after{
-  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2213%22%20height%3D%2211%22%20viewBox%3D%220%200%2013%2011%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M7.06329%2010.5C6.67839%2011.1667%205.71614%2011.1667%205.33124%2010.5L0.135086%201.5C-0.249814%200.833334%200.231312%201.22094e-06%201.00111%201.15364e-06L11.3934%202.4512e-07C12.1632%201.77822e-07%2012.6443%200.833333%2012.2594%201.5L7.06329%2010.5Z%22%20fill%3D%22%23AE7A13%22/%3E%3C/svg%3E");
-}
 
-.acfsef .fund-profile-txt{
+.acfsef .fund-profile-txt,
+.page-node-type-fund .fund-profile-txt{
   color: #798086;
 }
 
+.acfsef .fund-profile-value .field--name-field-fund-profile-value,
+.page-node-type-fund .fund-profile-value .field--name-field-fund-profile-value{
+  display: flex;
+}
+
+.donut-chart{
+  width: min(300px, 100%);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  --donut-gap-color: #FBF7F1;
+  background-image: var(--donut-bg, conic-gradient(#E6C68B 0 100%));
+  position: relative;
+}
+.donut-chart::after{
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  background: var(--donut-hole, #FBF7F1);
+  z-index: 0;
+}
+.donut-center{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 1;
+  color: #1A1C1E;
+  font-weight: 500;
+}
+.donut-center .donut-label{
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #635E5E;
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+}
+.donut-center .donut-value{
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+}
+.donut-center .donut-total{
+  font-size: 1.375rem;
+  line-height: 2.125rem;
+}
+a.paragraph--type--home-funds,
+a.paragraph--type--home-funds:hover{
+  color: #1A1C1E;
+}
+.field--name-field-hf-icon,
+.hpf-image-cont .lottie-wrapper{
+  border-radius: 20px;
+}
+.hpnrdesc strong{
+  font-weight: 400;
+}
+.asset-management-lp .paragraph--type--home-reason .field--name-field-media-image img {
+  max-width: 150px;
+}
+.investment-banking .paragraph--type--home-reason .field--name-field-media-image img {
+  max-width: 150px;
+}
+.investment-banking .hero-text-media-media img{   
+  max-width: 475px;
+}
+input[type="text"]:focus-visible {
+  outline: 1px solid #b87333;
+  outline-offset: 1px;
+}
+.article-page-body a,
+.article-page-body a:hover,
+.article-page-body a:visited,
+.article-page-body a:active{
+  color: #1A1C1E;
+  font-weight: 600;
+}
 
 /* ======================================================================
    Media Queries
@@ -3371,9 +3496,6 @@ header a.emenu-item:hover {
   }
   .map-container {
     min-height: 500px;
-  }
-  .asset-management-lp .feature-grid--light .feature-item-title {
-    max-width: 100%;
   }
 }
 
@@ -4158,6 +4280,67 @@ header a.emenu-item:hover {
     flex-wrap: wrap;
   }
 
+  /* ── Modal table → card layout on mobile ── */
+  .icap-modal-table-wrapper {
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .icap-modal-table {
+    display: block;
+    width: 100%;
+  }
+
+  .icap-modal-table .icap-modal-head {
+    display: none;
+  }
+
+  .icap-modal-table .icap-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Reset default td styling */
+  .icap-modal-table .icap-modal-row .row-col {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Last item no margin */
+  .icap-modal-table .icap-modal-row .row-col:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Label from data-label attr (all columns) */
+  .icap-modal-table .icap-modal-row .row-col-1::before,
+  .icap-modal-table .icap-modal-row .row-col-2::before,
+  .icap-modal-table .icap-modal-row .row-col-3::before {
+    content: attr(data-label);
+    line-height: 1.375rem;
+    font-weight: 400;
+    color: #635E5E;
+  }
+
+  .icap-modal-table .icap-modal-row .row-col-1,
+  .icap-modal-table .icap-modal-row .row-col-2,
+  .icap-modal-table .icap-modal-row .row-col-3 {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: #1A1C1E;
+  }
+
+  .icap-modal-table th.row-col {
+    width: auto;
+  }
+
   /* Fullscreen overlay stays */
   .icap-modal {
     align-items: flex-end;
@@ -4170,9 +4353,9 @@ header a.emenu-item:hover {
   .icap-modal-dialog {
     width: 100% !important;
     max-width: 100% !important;
-    border-radius: 24px 24px 0 0 !important;
+    border-radius: 20px 20px 0 0 !important;
     margin: 0;
-    padding: 1.5rem !important;
+    padding: 1.25rem !important;
     animation: icap-sheet-slide-up .28s ease-out;
     transform: translateY(0);
     position: relative;
@@ -4195,6 +4378,60 @@ header a.emenu-item:hover {
     top: 12px;
     right: 16px;
   }
+
+  .icap-modal-title {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+  }
+
+  .icap-modal-table-wrapper {
+    background: #FBF7F1;
+    border-radius: 20px;
+    padding: 1rem;
+  }
+  .icap-modal-section-title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  
+  .icap-modal-table .icap-modal-body .icap-modal-row {
+    border-bottom: 1px solid #D8D8D8;
+    padding-bottom: 1rem;
+  }
+
+  .icap-modal-table .icap-modal-body .icap-modal-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .icap-modal-section-note, .icap-modal-note {
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+  }
+  #icapModalGCC .icap-modal-table-wrapper {
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+  
+  #icapModalGCC .icap-modal-table .icap-modal-body .icap-modal-row {
+    border-bottom: 0;
+    padding-bottom: 0;
+    background: #FBF7F1;
+    border-radius: 20px;
+    padding: 1rem;
+  }
+  #icapModalGCC .icap-modal-table .icap-modal-row .row-col-1::before {
+    display: none;
+  }
+  #icapModalGCC .icap-modal-table .icap-modal-row .row-col-1 {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  #icapModalGCC .icap-modal-section-note {
+  color: #635E5E !important;
+}
 
   /* Slide-up animation */
   @keyframes icap-sheet-slide-up {
@@ -4881,13 +5118,13 @@ header a.emenu-item:hover {
     line-height: 20px;
   }
   .global-market .feature-item.item-1 .feature-item-title{
-    max-width: 88px;
+    max-width: 100px;
   }
   .global-market .feature-item.item-2 .feature-item-title{
     max-width: 79px;
   }
   .global-market .feature-item.item-3 .feature-item-title{
-    max-width: 137px;
+    max-width: 150px;
   }
   .global-market .feature-grid .feature-grid-bottom > .feature-item .feature-item-inner,
   .global-market .feature-grid .feature-grid-top > .feature-item .feature-item-inner{
@@ -4998,28 +5235,37 @@ header a.emenu-item:hover {
   .asset-management-lp .page-banner-title-dif-color{
     display: block;
   }
-  .acfsef .paragraph--type--fund-performance .paragraph-container{
+  .acfsef .paragraph--type--fund-performance .paragraph-container,
+  .page-node-type-fund .paragraph--type--fund-performance .paragraph-container{
     padding-right: 0;
     padding-left: 0;
   }
-  .acfsef .paragraph--type--fund-performance > .container > .paragraph-container{
+  .acfsef .paragraph--type--fund-performance > .container > .paragraph-container,
+  .page-node-type-fund .paragraph--type--fund-performance > .container > .paragraph-container{
     padding-right: 1.25rem;
     padding-left: 1.25rem;
   }
-  .acfsef .main_title_txt{
+  .acfsef .main_title_txt,
+  .page-node-type-fund .main_title_txt{
     line-height: 37px;
   }
-  .acfsef .page-banner .paragraph-container{
+  .acfsef .page-banner .paragraph-container,
+  .page-node-type-fund .page-banner .paragraph-container{
     padding-top: 5.9375rem;
   }
-  .acfsef .page-banner-desc{
+  .acfsef .page-banner-desc,
+  .page-node-type-fund .page-banner-desc{
     padding-top: 0.3125rem
   }
   
   .acfsef .page-banner-primary-cta a,
+  .page-node-type-fund .page-banner-primary-cta a,
   .acfsef .page-banner-primary-cta a:hover,
+  .page-node-type-fund .page-banner-primary-cta a:hover,
   .acfsef .page-banner-primary-cta a:visited,
-  .acfsef .page-banner-primary-cta a:active {
+  .page-node-type-fund .page-banner-primary-cta a:visited,
+  .acfsef .page-banner-primary-cta a:active,
+  .page-node-type-fund .page-banner-primary-cta a:active {
     padding-left: 2rem;
     padding-right: 2rem;
     padding-top: 1.25rem;
@@ -5028,43 +5274,53 @@ header a.emenu-item:hover {
     line-height: 20px;
     font-weight: 500;
   }
-  .acfsef .page-banner-mobile{
+  .acfsef .page-banner-mobile,
+  .page-node-type-fund .page-banner-mobile{
     padding-bottom: 0.5rem;
     background-position: 80% 50%;
   }
-  .acfsef .page-banner-desc {
+  .acfsef .page-banner-desc,
+  .page-node-type-fund .page-banner-desc {
     max-width: 76%;
   }
-  .acfsef .paragraph--type--fund-performance .paragraph-container {
+  .acfsef .paragraph--type--fund-performance .paragraph-container,
+  .page-node-type-fund .paragraph--type--fund-performance .paragraph-container {
     padding-top: 0.9375rem;
     padding-bottom: 8px;
   }
-  .acfsef .paragraph--type--fund-performance .sub-txt {
+  .acfsef .paragraph--type--fund-performance .sub-txt,
+  .page-node-type-fund .paragraph--type--fund-performance .sub-txt {
     padding-top: 0.125rem;
     font-size: 0.875rem;
     line-height: 1.375rem;
     padding-left: 0;
     padding-right: 0;
   }
-  .acfsef .paragraph--type--fund-performance .sub-txt br {
+  .acfsef .paragraph--type--fund-performance .sub-txt br,
+  .page-node-type-fund .paragraph--type--fund-performance .sub-txt br {
     display: none;
   }
-  .acfsef .fund-details-wrapper {
+  .acfsef .fund-details-wrapper,
+  .page-node-type-fund .fund-details-wrapper {
     padding-top: 1.5rem;
   }
-  .acfsef .fund-title {
+  .acfsef .fund-title,
+  .page-node-type-fund .fund-title {
     font-size: 0.75rem;
     line-height: 1.125rem;
   }
-  .acfsef .fund-txt {
+  .acfsef .fund-txt,
+  .page-node-type-fund .fund-txt {
     font-size: 1.125rem;
     line-height: 1.625rem;
   }
-  .acfsef .paragraph--type--fund-highlights {
+  .acfsef .paragraph--type--fund-highlights,
+  .page-node-type-fund .paragraph--type--fund-highlights {
     border-radius: 1.25rem;
     padding: 1rem;
   }
-  .acfsef .fund-profile-inner {
+  .acfsef .fund-profile-inner,
+  .page-node-type-fund .fund-profile-inner {
     margin-top: 0.875rem;
     padding-top: 0;
     padding-left: 1.5rem;
@@ -5072,42 +5328,51 @@ header a.emenu-item:hover {
     padding-bottom: 0.9375rem;
     margin-bottom: 2rem;
   }
-  .acfsef .fund-profile-inner .paragraph-container {
+  .acfsef .fund-profile-inner .paragraph-container,
+  .page-node-type-fund .fund-profile-inner .paragraph-container {
     padding-top: 0;
   }
-  .acfsef .fund-profile .paragraph--type--title-text{
+  .acfsef .fund-profile .paragraph--type--title-text,
+  .page-node-type-fund .fund-profile .paragraph--type--title-text{
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  .acfsef .fund-profile-txt{
+  .acfsef .fund-profile-txt,
+  .page-node-type-fund .fund-profile-txt{
     font-size: 0.75rem;
     line-height: 1.125rem;
     color: #798086;
   }
-  .acfsef .fund-profile-inner .sub-txt{
+  .acfsef .fund-profile-inner .sub-txt,
+  .page-node-type-fund .fund-profile-inner .sub-txt{
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
     padding-top: 0.1875rem;
   }
-  .acfsef .fund-profile-inner .sub-txt p {
+  .acfsef .fund-profile-inner .sub-txt p,
+  .page-node-type-fund .fund-profile-inner .sub-txt p {
     margin-bottom: 0 !important;
   }
-  .acfsef .asset-allocation .paragraph-container {
+  .acfsef .asset-allocation .paragraph-container,
+  .page-node-type-fund .asset-allocation .paragraph-container {
     padding-top: 1.375rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     padding-bottom: 1.25rem;
   }
-  .acfsef .asset-allocation .main_title_txt{
+  .acfsef .asset-allocation .main_title_txt,
+  .page-node-type-fund .asset-allocation .main_title_txt{
     margin: 0 !important;
   }
-  .acfsef .asset-allocation-content{
+  .acfsef .asset-allocation-content,
+  .page-node-type-fund .asset-allocation-content{
     width: 100% !important;
     padding-left: 2.3438rem !important;
     padding-right: 2.3438rem !important;
   }
-  .acfsef .all-perc-wrapper{
+  .acfsef .all-perc-wrapper,
+  .page-node-type-fund .all-perc-wrapper{
     margin-left: 0.75rem !important;
     margin-right: 0.75rem !important;
     padding-left: 0 !important;
@@ -5115,65 +5380,79 @@ header a.emenu-item:hover {
     padding-top: 0.6875rem;
     padding-bottom: 0.9375rem;
   }
-  .acfsef .field--name-field-holding-paragraph{
+  .acfsef .field--name-field-holding-paragraph,
+  .page-node-type-fund .field--name-field-holding-paragraph{
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
-  .acfsef .paragraph--type--ti {
+  .acfsef .paragraph--type--ti,
+  .page-node-type-fund .paragraph--type--ti {
     margin-left: 0;
     margin-right: 0;
     font-size: 1.125rem;
     line-height: 1.5rem;
   }
-  .acfsef .fund-top-holding-wrapper {
+  .acfsef .fund-top-holding-wrapper,
+  .page-node-type-fund .fund-top-holding-wrapper {
     margin-left: 0;
     margin-right: 0;
     padding-left: 0;
     padding-right: 0;
     margin-bottom: 4px;
   }
-  .acfsef .field--name-field-holding-paragraph .fund-highlight{
+  .acfsef .field--name-field-holding-paragraph .fund-highlight,
+  .page-node-type-fund .field--name-field-holding-paragraph .fund-highlight{
     --bs-gutter-x: 0;
     --bs-gutter-y: 0;
   }
-  .acfsef .holding-title{
+  .acfsef .holding-title,
+  .page-node-type-fund .holding-title{
     width: 83.33333333%;
     padding: 0;
   }
-  .acfsef .holding-perc{
+  .acfsef .holding-perc,
+  .page-node-type-fund .holding-perc{
     width: 16.66666667%;
   }
-  .acfsef .asset-allocation-content .unit-price-wrapper{
+  .acfsef .asset-allocation-content .unit-price-wrapper,
+  .page-node-type-fund .asset-allocation-content .unit-price-wrapper{
     padding-left: 3.75rem;
     padding-right: 3.75rem;
     margin-bottom: 0.5rem !important;
   }
-  .acfsef .holding-color{
+  .acfsef .holding-color,
+  .page-node-type-fund .holding-color{
     width: 14px;
     height: 14px;
   }
-  .acfsef .asset-allocation{
+  .acfsef .asset-allocation,
+  .page-node-type-fund .asset-allocation{
     padding-bottom: 1rem;
   }
-  .acfsef .docs-reports .docs-reports-display {
+  .acfsef .docs-reports .docs-reports-display,
+  .page-node-type-fund .docs-reports .docs-reports-display {
     font-size: 28px;
     line-height: 2.3125rem;
   }
-  .acfsef .docs-reports .docs-reports-intro{
+  .acfsef .docs-reports .docs-reports-intro,
+  .page-node-type-fund .docs-reports .docs-reports-intro{
     font-size: 0.875rem;
     line-height: 1.375rem;
     padding-top: 0.375rem;
     margin-bottom: 0.375rem !important;
   }
-  .acfsef .docs-reports .paragraph-container{
+  .acfsef .docs-reports .paragraph-container,
+  .page-node-type-fund .docs-reports .paragraph-container{
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
-  .acfsef .docs-reports .docs-reports-tab {
+  .acfsef .docs-reports .docs-reports-tab,
+  .page-node-type-fund .docs-reports .docs-reports-tab {
     padding-left: 2rem;
     padding-right: 2rem;
   }
-  .acfsef .docs-reports .docs-reports-tabs{
+  .acfsef .docs-reports .docs-reports-tabs,
+  .page-node-type-fund .docs-reports .docs-reports-tabs{
     display: flex !important;
     flex-wrap: nowrap;
     gap: 0.5rem;
@@ -5188,11 +5467,13 @@ header a.emenu-item:hover {
     margin-bottom: 1.4375rem;
   }
 
-  .acfsef .docs-reports .docs-reports-tabs::-webkit-scrollbar{
+  .acfsef .docs-reports .docs-reports-tabs::-webkit-scrollbar,
+  .page-node-type-fund .docs-reports .docs-reports-tabs::-webkit-scrollbar{
     display: none;
   }
 
-  .acfsef .docs-reports .docs-reports-tabs > .docs-reports-tab{
+  .acfsef .docs-reports .docs-reports-tabs > .docs-reports-tab,
+  .page-node-type-fund .docs-reports .docs-reports-tabs > .docs-reports-tab{
     flex: 0 0 auto;
     white-space: nowrap;
     scroll-snap-align: start;
@@ -5200,11 +5481,13 @@ header a.emenu-item:hover {
     align-items: center;
     justify-content: center;
   }
-  .acfsef .doc-item .doc-icon::after {
+  .acfsef .doc-item .doc-icon::after,
+  .page-node-type-fund .doc-item .doc-icon::after {
     width: 30px;
     height: 36px;
   }
-  .acfsef .docs-reports .docs-list {
+  .acfsef .docs-reports .docs-list,
+  .page-node-type-fund .docs-reports .docs-list {
     gap: 0.875rem;
   }
   
@@ -5722,6 +6005,7 @@ header a.emenu-item:hover {
   }
   .newsroom .hpnrviewbg{
     min-height: 402px;
+    display: block;
   }
   .newsroom .newsroom-articles{
     margin-top: 1.4375rem !important;
@@ -6263,6 +6547,30 @@ header a.emenu-item:hover {
   .fund-performance-chart-periods{
     justify-content: space-around;
   }
+  .fund-performance-chart-stats .label {
+    font-size: 0.6875rem;
+    line-height: 0.9375rem;
+    text-align: center;
+  }
+  .fund-performance-chart-stats .value{
+    justify-content: center;
+    padding-top: 0.5rem;
+  }
+  
+  .donut-center .donut-total{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  .donut-center .donut-label{
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+  }
+  .info-security-l .datafCarousselItem{
+    margin-left: 0.75rem !important;
+    margin-right: 0.75rem !important;
+    border: 0;
+    padding: 1.25rem;
+  }
 
 }
 
@@ -6279,7 +6587,7 @@ header a.emenu-item:hover {
 
   .home-banner-video {
     position: absolute;
-    top: -70px;
+    top: 0;
     left: 0;
     width: 119%;
     /* height: 100%; */
@@ -6376,16 +6684,19 @@ header a.emenu-item:hover {
     position: relative;
     width: min(743px, 92vw);
     max-width: 743px;
+    transform: none !important;
+    margin: 0 auto;
+  }
+
+  .icap-modal {
+    align-items: center !important;
   }
 
   #icapModalApp .icap-modal-title {
     text-align: start;
   }
 
-  /* prevents background scroll while any modal is open */
-  html.is-modal-open {
-    overflow: hidden;
-  }
+  /* html.is-modal-open rule moved to base (non-media) block */
 
   .page-node-type-home-page .paragraph-container.paragraph--type--home-mobile {
     min-height: 848px;
@@ -6708,140 +7019,176 @@ header a.emenu-item:hover {
   .asset-management-lp .field--name-field-hpwr-title{
     padding-top: 2.5rem;
   }
-  .acfsef .page-banner-title-dif-color{
+  .acfsef .page-banner-title-dif-color,
+  .page-node-type-fund .page-banner-title-dif-color{
     display: block;
   }
-  .acfsef .page-banner-desc {
+  .acfsef .page-banner-desc,
+  .page-node-type-fund .page-banner-desc {
     margin-bottom: 3rem;
   }
-  .acfsef .page-banner {
+  .acfsef .page-banner,
+  .page-node-type-fund .page-banner {
     padding-bottom: 4.5rem;
   }
-  .acfsef .paragraph--type--fund-performance .paragraph-container {
+  .acfsef .paragraph--type--fund-performance .paragraph-container,
+  .page-node-type-fund .paragraph--type--fund-performance .paragraph-container {
     padding-top: 0;
     padding-bottom: 0;
     min-height: auto;
   }
-  .acfsef .paragraph--type--fund-performance > .container > .paragraph-container {
+  .acfsef .paragraph--type--fund-performance > .container > .paragraph-container,
+  .page-node-type-fund .paragraph--type--fund-performance > .container > .paragraph-container {
     padding-top: 3.4375rem;
     padding-bottom: 7.5rem;
     padding-left: 9.75%;
     padding-right: 9.75%;
   }
-  .acfsef .paragraph--type--fund-performance .sub-txt {
+  .acfsef .paragraph--type--fund-performance .sub-txt,
+  .page-node-type-fund .paragraph--type--fund-performance .sub-txt {
     font-size: 1.375rem;
     line-height: 2.125rem;
   } 
-  .acfsef .main_title_txt {
+  .acfsef .main_title_txt,
+  .page-node-type-fund .main_title_txt {
     margin-bottom: 0.375rem !important;
   }
-  .acfsef .fund-profile .sub-txt {
+  .acfsef .fund-profile .sub-txt,
+  .page-node-type-fund .fund-profile .sub-txt {
     font-size: 16px;
     line-height: 1.5rem;
   }
-  .acfsef .fund-details-wrapper > .fund-profile {
+  .acfsef .fund-details-wrapper > .fund-profile,
+  .page-node-type-fund .fund-details-wrapper > .fund-profile {
     margin-top: 1.0625rem;
   }
-  .acfsef .paragraph--type--fund-profile.fund-profile {
+  .acfsef .paragraph--type--fund-profile.fund-profile,
+  .page-node-type-fund .paragraph--type--fund-profile.fund-profile {
     padding-top: 0;
     padding-bottom: 1.1875rem;
   }
-  .acfsef .paragraph--type--fund-highlights{
+  .acfsef .paragraph--type--fund-highlights,
+  .page-node-type-fund .paragraph--type--fund-highlights{
     padding: 1rem;
   }
-  .acfsef .fund-txt {
+  .acfsef .fund-txt,
+  .page-node-type-fund .fund-txt {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
-  .acfsef .fund-profile-txt{
+  .acfsef .fund-profile-txt,
+  .page-node-type-fund .fund-profile-txt{
     font-size: 0.875rem;
     line-height: 1.375rem;
   }
-  .acfsef .fund-profile-value{
+  .acfsef .fund-profile-value,
+  .page-node-type-fund .fund-profile-value{
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
-  .acfsef .paragraph--type--fund-performance .col-lg-6{
+  .acfsef .paragraph--type--fund-performance .col-lg-6,
+  .page-node-type-fund .paragraph--type--fund-performance .col-lg-6{
     width: 45.5%;
   }
-  .acfsef .paragraph--type--fund-performance .col-lg-6.unit-price-wrapper{
+  .acfsef .paragraph--type--fund-performance .col-lg-6.unit-price-wrapper,
+  .page-node-type-fund .paragraph--type--fund-performance .col-lg-6.unit-price-wrapper{
     width: 54.5%;
   }
-  .acfsef .fund-highlight-img{
+  .acfsef .fund-highlight-img,
+  .page-node-type-fund .fund-highlight-img{
     padding: 0;
   }
-  .acfsef .asset-allocation .paragraph-container{
+  .acfsef .asset-allocation .paragraph-container,
+  .page-node-type-fund .asset-allocation .paragraph-container{
     padding-top: 0.5rem;
     padding-bottom: 2.4375rem;
     min-height: auto;
   }
-  .acfsef .all-perc-wrapper{
+  .acfsef .all-perc-wrapper,
+  .page-node-type-fund .all-perc-wrapper{
     padding-top: 1.375rem;
     padding-bottom: 1.5rem;
   }
-  .acfsef .paragraph--type--ti{
+  .acfsef .paragraph--type--ti,
+  .page-node-type-fund .paragraph--type--ti{
     font-size: 1.25rem;
     line-height: 1.75rem;
     margin-bottom: 1.5rem;
   }
-  .acfsef .holding-title{
+  .acfsef .holding-title,
+  .page-node-type-fund .holding-title{
     font-size: 1.125rem;
     line-height: 2rem;
     padding: 0;
   }
-  .acfsef .holding-perc{
+  .acfsef .holding-perc,
+  .page-node-type-fund .holding-perc{
     font-size: 1.375rem;
     line-height: 2.125rem;
   }
-  .acfsef .fund-top-holding-wrapper{
+  .acfsef .fund-top-holding-wrapper,
+  .page-node-type-fund .fund-top-holding-wrapper{
     padding-top: 0.5625rem;
     padding-bottom: 0.5625rem;
     margin-top: 0;
     margin-bottom: 0;
   }
-  .acfsef .asset-allocation {
+  .acfsef .asset-allocation,
+  .page-node-type-fund .asset-allocation {
     padding-bottom: 9.875rem;
   }
-  .acfsef .docs-reports {
+  .acfsef .docs-reports,
+  .page-node-type-fund .docs-reports {
     padding-top: 1.125rem;
     padding-bottom: 2.25rem;
   }
-  .acfsef .docs-reports .docs-reports-intro {
+  .acfsef .docs-reports .docs-reports-intro,
+  .page-node-type-fund .docs-reports .docs-reports-intro {
     margin-bottom: 2.6875rem !important;
     max-width: 866px;
   }
-  .acfsef .docs-reports .docs-reports-tabs {
+  .acfsef .docs-reports .docs-reports-tabs,
+  .page-node-type-fund .docs-reports .docs-reports-tabs {
     margin-bottom: 3.375rem;
   }
-  .acfsef .docs-reports .docs-reports-tab {
+  .acfsef .docs-reports .docs-reports-tab,
+  .page-node-type-fund .docs-reports .docs-reports-tab {
     padding: 1.125rem 2rem;
   }
-  .acfsef .docs-reports > .container > .paragraph-container{
+  .acfsef .docs-reports > .container > .paragraph-container,
+  .page-node-type-fund .docs-reports > .container > .paragraph-container{
     padding-left: 0;
     padding-right: 0;
   }
-  .acfsef .paragraph--type--fund-performance .fund-col{
+  .acfsef .paragraph--type--fund-performance .fund-col,
+  .page-node-type-fund .paragraph--type--fund-performance .fund-col{
     max-width: 46%;
   }
-  .acfsef .paragraph--type--fund-performance .fund-col.unit-price-wrapper{
+  .acfsef .paragraph--type--fund-performance .fund-col.unit-price-wrapper,
+  .page-node-type-fund .paragraph--type--fund-performance .fund-col.unit-price-wrapper{
     max-width: 54%;
   }
-  .acfsef .docs-reports .year-pill{
+  .acfsef .docs-reports .year-pill,
+  .page-node-type-fund .docs-reports .year-pill{
     font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 500;
   }
-  .acfsef .docs-reports .ann-list-title {
+  .acfsef .docs-reports .ann-list-title,
+  .page-node-type-fund .docs-reports .ann-list-title {
     font-size: 1.75rem;
   }
   .acfsef .ann-item .ann-title,
-  .acfsef .ann-item .ann-text{
+  .page-node-type-fund .ann-item .ann-title,
+  .acfsef .ann-item .ann-text,
+  .page-node-type-fund .ann-item .ann-text{
     font-size: 1.125rem;
     font-weight: 400;
     line-height: 2rem;
     color: #1A1C1E;
   }
-  .acfsef .ann-item .ann-date{
+  .acfsef .ann-item .ann-date,
+  .page-node-type-fund .ann-item .ann-date{
     display: none;
   }
   .investment-banking .page-banner .paragraph-container{
@@ -7309,6 +7656,7 @@ header a.emenu-item:hover {
   .newsroom .hpnrviewbg{
     min-height: 425px;
     padding-top: 9px !important;
+    display: block;
   }
   .newsroom .hpnrviewcont{
     padding-bottom: 2.75rem !important;
@@ -7597,6 +7945,16 @@ header a.emenu-item:hover {
   .privacy-policy-lp .section-container .section {
     margin-bottom: 2.625rem;
   }
+  .home .field--name-field-hm-description{
+    width: 82%;
+  }
+  
+  .real-estate .paragraph--type--fund-performance .fund-col.unit-price-wrapper{
+    max-width: 54%;
+  }
+  .real-estate .paragraph--type--fund-performance .fund-col{
+    max-width: 46%;
+  }
 }
 
 @media (max-width: 1199.98px) {
@@ -7659,6 +8017,10 @@ header a.emenu-item:hover {
   }
   .map-container {
     min-height: 786px;
+  }
+  .home-banner.has-video{
+    aspect-ratio: 1364 / 768;
+    overflow: visible;
   }
 }
 @media (min-width: 1400px) {
@@ -7728,7 +8090,6 @@ header a.emenu-item:hover {
   .faq-accordion {
     padding: 10% 12.5%;
   }
-  .home-banner.has-video,
   .paragraph--type--home-one-platform .paragraph-container {
     min-height: 890px;
   }
@@ -7763,10 +8124,43 @@ header a.emenu-item:hover {
   .page-node-type-article .hpnrdesc{
     max-height: 70px; 
   }
+  .info-security-l .data-category {
+    width: 100%;
+  }
+  .info-security-l .data-security-wrapper{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .info-security-l .data-grid-carousal {
+    padding-right: 6.5rem !important;
+    padding-left: 6.5rem !important;
+  }
+  .info-security-l .datafCarousselItem{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 }
-@media (min-width: 1600px) {
+@media (min-width: 1441px) {
+  .paragraph--type--home-banner{
+    aspect-ratio: 1364 / 768;
+  }
   .home-banner-video {
     width: 100%;
+    top: 0;
+    object-fit: contain;
+    aspect-ratio: 1364 / 768;
+  }
+  .home-banner.has-video {
+    overflow: hidden;
+  }
+  .page-banner{
+    aspect-ratio: 1440/886;
+  }
+  .info-security-l .data-grid-carousal {
+    padding-right: 6.5rem !important;
+    padding-left: 6.5rem !important;
+    padding-bottom: 0 !important;
+    max-width: 1440px;
   }
 }
 @media (max-height: 729px) {
